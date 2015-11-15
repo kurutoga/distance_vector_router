@@ -1,29 +1,26 @@
-'''
-update_vectors: 
-    input: 
-        vectors: current cost vector
-        options: new cost options from neighbour
-    output:
-        none
-    description:
-        handles the 'Router update messages' protocol
-'''
-def update_vectors(costs,options,link):
-    opts        = options.split()
-    size        = len(opts)
-    updated     = False
-    
-    for i in range(size/2):
-        new_cost = link + int(opts[(i*2)+1])
-        if costs[i*2] > new_cost:
-            costs[i*2] = new_cost
+import socket,sys,time
+from select import select
 
-            updated = True
-    
-    if (updated==True):
-        update_neighbours(costs)
+def broadcastcost(sock, nodes):
+    message = 'U '
+    for node,cost in nodes:
+        message+=node+' '+str(cost)
+    sock.send(message)
 
+def setupserver(baseport):
+    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    sock.bind('',baseport)
+    return sock
 
+def setupsock(host,localport,remoteport):
+    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    try:
+        sock.bind('',port)
+        sock.connect(host,remoteport)
+        return sock
+    except Exception,e:
+        print("Error: ",Exception,e)
+        return
 
 
 
