@@ -67,9 +67,6 @@ This is the infinite select loop.
 We aim to catch messages from neighbors,and other nodes
 on appropriate sockets.
 inputset: serversocket + neighbor sockets
-outputset: serversocket (for 'L' messages) and
-           neighborset  (for 'U' messages)
-
 TIMEOUT = 30sec
 if we timeout, we send the 'U' message to all neighbors.
 
@@ -79,7 +76,7 @@ while (True):
     try:
         reader,writer,error = select.select(inputset,outputset,[],timeout)
     except Exception as e:
-        print(socket.error,e)
+        print(e)
         break
     for s in reader:
         if s is broadcaster:
