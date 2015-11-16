@@ -9,14 +9,16 @@ def broadcastcost(sock, nodes):
 
 def setupserver(baseport):
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    sock.bind('',baseport)
+    sock.bind(('',baseport))
     return sock
 
 def setupsock(host,localport,remoteport):
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     try:
-        sock.bind('',localport)
-        sock.connect(host,remoteport)
+        print(host,localport,remoteport)
+        sock.bind(('',localport))
+        print(host,localport)
+        sock.connect((host,remoteport))
         return sock
     except:
         return

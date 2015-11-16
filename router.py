@@ -27,7 +27,6 @@ we extract, testdir, routername
 NOTE: using readroutes, readlinks from skeleton
 '''
 
-
 parser = cliparser(description='router')
 parser.add_argument('-p', action='store_true')
 parser.add_argument('testdir')
@@ -42,21 +41,28 @@ routername  = args.routername
 links           = readlinks(testdir, routername)
 routerlist      = readrouters(testdir)
 
-linkinfos = {}
 neighbor = []
 
 for link,linkinfo in links.items():
-    linkinfos[link]  = linkinfo
     neighbor.append([link,linkinfo.cost])
 
 
-routerx     = Router(routername, neighbor)
+routerx     = Router(routername, neighbor, poisoned)
 #print(routerx)
 #print(routerx.node)
 #print(routerx.name)
 #print(routerx.neighbors)
 #print(routerx.table)
-routerx.printhandle('P')
+#routerx.printhandle('P')
+
+neighborset = []
+nodeset     = []
+
+for host,info in routerlist.items():
+    if host in links:
+        neighborset.append(setupsock(routerlist[host].host,routerlist[routername].baseport+links[host].locallink,routerlist[host].baseport+links[host].remotelink))
+print(neighborset)
+
 
 
 ## init routing table

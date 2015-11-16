@@ -46,7 +46,6 @@ class RoutingTable:
 
     def addtable(self,index):
         self.distance_vectors[index] = {}
-        self.distance_vectors[index][index] = DistanceVector(index,0)
 
     #d-v update helper func
     def update_vector(self, node, index, cost, nhop):
@@ -153,11 +152,12 @@ class Router:
 
 
     '''
-    def __init__(self, node, neighbors):
+    def __init__(self, node, neighbors,poisoned=False):
         self.name       = node
         self.node       = Node(node,0)
         self.nodes      = {}
         self.neighbors  = []
+        self.poisoned   = poisoned
         self.table      = RoutingTable(node, neighbors)
         
         for node,cost in neighbors:
@@ -232,7 +232,6 @@ class Router:
                     Dv_y        = self.table.getvector(v,y.node)
                     costv       = Cx_v + Dv_y.getcost()
                     mincost     = Dx_y.getcost()
-
                     if costv<mincost:
                         Dx_y.update_vector(self.name,y.node,costv,v)
                         tablechanged = True
