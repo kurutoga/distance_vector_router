@@ -43,6 +43,11 @@ class RoutingTable:
         for x,c in nodes:
             self.distance_vectors[base][x] = DistanceVector(base,c)
 
+
+    def addtable(self,index):
+        self.distance_vectors[index] = {}
+        self.distance_vectors[index][index] = DistanceVector(index,0)
+
     #d-v update helper func
     def update_vector(self, node, index, cost, nhop):
         '''
@@ -158,6 +163,7 @@ class Router:
         for node,cost in neighbors:
             self.neighbors.append(node)
             self.nodes[node] = Node(node,cost=cost)
+            self.table.addtable(node)
 
     def addnode(self,base,node):
         if (node[0] not in self.nodes):
@@ -253,12 +259,14 @@ class Router:
             print('     ',end="")
             dests = []
             costs = []
-            for ind,cost in self.table.gettable(chunk[1]).items():
+            for ind,vector in self.table.gettable(chunk[1]).items():
                 dests.append(ind)
-                costs.append(cost)
+                costs.append(vector)
             for ind in dests:
                 print(ind,end="   ")
             print('')
             print(chunk[1],end="    ")
-            for cost in costs:
-                print(cost,end="   ")
+            for vec in costs:
+                print(vec.cost,end="   ")
+            print('')
+            print('')
