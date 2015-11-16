@@ -266,6 +266,9 @@ class Router:
             print('')
             print(chunk[1],end="    ")
             for vec in costs:
-                print(vec.cost,end="   ")
+                if (vec.cost>=64):
+                    print('~',end="   ")
+                else:
+                    print(vec.cost,end="   ")
             print('')
             print('')

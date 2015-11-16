@@ -1,24 +1,28 @@
 import socket,sys,time
 from select import select
 
+def broadcastlink(sock,cost):
+    message = 'L '+str(cost)
+    sock.send(message)
+
 def broadcastcost(sock, nodes):
     message = 'U '
     for node,cost in nodes:
         message+=node+' '+str(cost)
     sock.send(message)
 
-def setupserver(baseport):
+def setupserver(host,baseport):
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     sock.bind(('',baseport))
     return sock
 
-def setupsock(host,localport,remoteport):
+def setupsock(host,remotehost,localport,remoteport):
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     try:
-        print(host,localport,remoteport)
-        sock.bind(('',localport))
-        print(host,localport)
-        sock.connect((host,remoteport))
+        sock.bind((host,localport))
+        sock.connect((remotehost,remoteport))
         return sock
     except:
-        return
+        print('ERROR')
+        sys.exit(1)
+        

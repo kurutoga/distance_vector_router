@@ -14,7 +14,7 @@ PROJECT 2: Distance-Vector Router
 
 
 '''
-import sys
+import sys, select
 from argparse import ArgumentParser as cliparser
 from readrouters import readlinks, readrouters
 from utils import setupserver, setupsock, broadcastcost
@@ -48,34 +48,21 @@ for link,linkinfo in links.items():
 
 
 routerx     = Router(routername, neighbor, poisoned)
-#print(routerx)
-#print(routerx.node)
-#print(routerx.name)
-#print(routerx.neighbors)
-#print(routerx.table)
-#routerx.printhandle('P')
 
 neighborset = []
-nodeset     = []
+broadcaster = setupserver(routerlist[routername].host,routerlist[routername].baseport)
 
 for host,info in routerlist.items():
     if host in links:
-        neighborset.append(setupsock(routerlist[host].host,routerlist[routername].baseport+links[host].locallink,routerlist[host].baseport+links[host].remotelink))
-print(neighborset)
+        neighborset.append(setupsock(routerlist[routername].host,routerlist[host].host,routerlist[routername].baseport+links[host].locallink,routerlist[host].baseport+links[host].remotelink))
+
+inputset    = [ broadcaster ]
+inputset.extend(neighborset)
+
+outputset   = inputset[:]
+
+#print(outputset,inputset)
 
 
 
-## init routing table
-## connect to neighbours
-## start an async server
-## LOOP 
-##  on update/link change
-##      change routing table
-##      forward/inform neighnours
-##      continue forever;
-
-
-## 1. init routing table
-
-#vars
 
