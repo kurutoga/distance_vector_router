@@ -51,6 +51,12 @@ for link,linkinfo in links.items():
 
 
 routerx     = Router(routername, neighbor)
+#print(routerx)
+#print(routerx.node)
+#print(routerx.name)
+#print(routerx.neighbors)
+#print(routerx.table)
+routerx.printhandle('P')
 
 
 ## init routing table

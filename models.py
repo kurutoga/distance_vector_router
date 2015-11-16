@@ -148,8 +148,6 @@ class Router:
 
 
     '''
-
-
     def __init__(self, node, neighbors):
         self.name       = node
         self.node       = Node(node,0)
@@ -234,7 +232,6 @@ class Router:
                         tablechanged = True
         return tablechanged
                     
-    
     def printhandle(self,message):
         '''
         Handler of P messages:
@@ -247,22 +244,21 @@ class Router:
         chunk = message.split()
         if len(chunk)==1:
             print('Routing Table for Base Router:')
-            printhandle('P '+self.name)
-            for n in self.neighbor:
+            self.printhandle('P '+self.name)
+            for n in self.neighbors:
                 print('Routing Table for neighbor '+n)
-                printhandle('P '+n)
+                self.printhandle('P '+n)
             pass
         else:
             print('     ',end="")
             dests = []
             costs = []
-            for ind,cost in self.table.gettable(chunk[1]):
+            for ind,cost in self.table.gettable(chunk[1]).items():
                 dests.append(ind)
                 costs.append(cost)
             for ind in dests:
                 print(ind,end="   ")
             print('')
-            print(self.table[chunk[1]],end="    ")
+            print(chunk[1],end="    ")
             for cost in costs:
                 print(cost,end="   ")
-
