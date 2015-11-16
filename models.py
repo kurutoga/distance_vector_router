@@ -57,11 +57,11 @@ class RoutingTable:
             self.distance_vectors[node] = {}
         if index not in self.distance_vectors[node]:
             self.distance_vectors[node][index] = DistanceVector(nhop,cost)
-            print('{0} - dest: {1} cost: {2} nexthop: {3}'.format(node,index,cost,nhop))
+            print('({0} - dest: {1} cost: {2} nexthop: {3})'.format(node,index,cost,nhop))
             return True
         elif ((self.distance_vectors[node][index].getcost()!=cost) or (self.distance_vectors[node][index].gethop()!=nhop)):
             self.distance_vectors[node][index].updatevector(cost,nhop)
-            print('{0} - dest: {1} cost: {2} nexthop: {3}'.format(node,index,cost,nhop))
+            print('({0} - dest: {1} cost: {2} nexthop: {3})'.format(node,index,cost,nhop))
             return True
         return False
 
@@ -213,6 +213,9 @@ class Router:
         assuming always right format.
         '''
         chunks = message.split()
+        if len(chunks)!=3:
+            print('invalid link cost updater message')
+            return
         return self.nodes[chunks[1]].updatecost(int(chunks[2]))
 
     def runbellmanford(self):
@@ -226,15 +229,19 @@ class Router:
         tablechanged = False
         for y in self.nodes:
             if (y.node != self.name): #to make sure not the base router
-                Dx_y = self.table.getvector(self.name,y.node) #current Dx(y)
+                Dx_y            = self.table.getvector(self.name,y.node) #current Dx(y)
+                mincost         = Dx_y.getcost()
+                minhop          = Dx_y.gethop()
                 for v in self.neighbors and v!=self.name:
                     Cx_v        = self.nodes[v].getcost()
                     Dv_y        = self.table.getvector(v,y.node)
                     costv       = Cx_v + Dv_y.getcost()
-                    mincost     = Dx_y.getcost()
                     if costv<mincost:
-                        Dx_y.update_vector(self.name,y.node,costv,v)
-                        tablechanged = True
+                        mincost = costv
+                        minhop  = v
+                if (Dx_y.getcost()!=mincost):
+                    self.table.update_vector(self.name,y.node,mincost,minhop)
+                    tablechanged = True
         return tablechanged
                     
     def printhandle(self,message):

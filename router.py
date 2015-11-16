@@ -46,7 +46,6 @@ neighbor = []
 for link,linkinfo in links.items():
     neighbor.append([link,linkinfo.cost])
 
-
 routerx     = Router(routername, neighbor, poisoned)
 
 neighborset = []
@@ -54,12 +53,55 @@ broadcaster = setupserver(routerlist[routername].host,routerlist[routername].bas
 
 for host,info in routerlist.items():
     if host in links:
-        neighborset.append(setupsock(routerlist[routername].host,routerlist[host].host,routerlist[routername].baseport+links[host].locallink,routerlist[host].baseport+links[host].remotelink))
+        neighborset.append(setupsock(routerlist[routername].host,routerlist[host].host,\
+                                     routerlist[routername].baseport+links[host].locallink,\
+                                     routerlist[host].baseport+links[host].remotelink))
 
 inputset    = [ broadcaster ]
 inputset.extend(neighborset)
 
 outputset   = inputset[:]
+
+'''
+This is the infinite select loop.
+We aim to catch messages from neighbors,and other nodes
+on appropriate sockets.
+inputset: serversocket + neighbor sockets
+outputset: serversocket (for 'L' messages) and
+           neighborset  (for 'U' messages)
+
+TIMEOUT = 30sec
+if we timeout, we send the 'U' message to all neighbors.
+
+'''
+while (True):
+    timeout     = 30
+    try:
+        reader,writer,error = select.select(inputset,outputset,[],timeout)
+    except Exception as e:
+        print(socket.error,e)
+        break
+    for s in reader:
+        if s is broadcaster:
+            '''
+                server socket on baseport of current router
+                we can expect to receive P and L messages
+            '''
+            pass
+
+        else:
+            '''
+                this must be a neighbor socket
+                only U messages expected.
+            '''
+            pass
+    if not (reader or writer or error):
+        '''
+        30 sec timeout.
+        Send 'U' messages to all neighbors
+        '''
+        pass
+
 
 #print(outputset,inputset)
 
