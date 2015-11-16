@@ -192,6 +192,9 @@ class Router:
             self.addnode(node)
         return self.table.updatedistancevector(base,routes)
 
+    def getdistancevector(self):
+        return self.table.gettable(self.name)
+
     def getneighbors(self):
         '''
         return a list of neighbor names

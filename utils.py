@@ -7,8 +7,8 @@ def broadcastlink(sock,cost):
 
 def broadcastcost(sock, nodes):
     message = 'U '
-    for node,cost in nodes:
-        message+=node+' '+str(cost)
+    for node,vector in nodes.items():
+        message+=node+' '+str(vector.cost)
     sock.send(message)
 
 def setupserver(host,baseport):

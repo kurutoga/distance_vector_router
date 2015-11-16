@@ -100,7 +100,10 @@ while (True):
         30 sec timeout.
         Send 'U' messages to all neighbors
         '''
-        pass
+        distancevector = routerx.getdistancevector()
+        for sock in neighborset:
+            broadcastcost(sock, distancevector)
+        
 
 
 #print(outputset,inputset)
