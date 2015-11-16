@@ -79,27 +79,40 @@ while (True):
         print(e)
         break
     for s in reader:
-        if s is broadcaster:
-            '''
-                server socket on baseport of current router
-                we can expect to receive P and L messages
-            '''
-            pass
+        data = s.recv(1024)
+        if data:
+            if s is broadcaster:
+                '''
+                    server socket on baseport of current router
+                    we can expect to receive P and L messages
+                '''
+                # we got a message
+                if (data[0]=='L'):
+                    pass
+                elif (data[0]=='P'):
+                    pass
+                else:
+                    print('invalid message type')
+                    pass
+            else:
+                '''
+                    this must be a neighbor socket
+                    only U messages expected.
+                '''
+                if (data[0]=='U'):
 
-        else:
+                    #update message
+                    #routerx.routerupdate(
+                    pass
+                pass
+        if not (reader or writer or error):
             '''
-                this must be a neighbor socket
-                only U messages expected.
+            30 sec timeout.
+            Send 'U' messages to all neighbors
             '''
-            pass
-    if not (reader or writer or error):
-        '''
-        30 sec timeout.
-        Send 'U' messages to all neighbors
-        '''
-        distancevector = routerx.getdistancevector()
-        for sock in neighborset:
-            broadcastcost(sock, distancevector)
+            distancevector = routerx.getdistancevector()
+            for sock in neighborset:
+                broadcastcost(sock, distancevector)
         
 
 
