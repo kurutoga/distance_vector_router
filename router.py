@@ -41,8 +41,13 @@ routername  = args.routername
 links       = readlinks(testdir, routername)
 routelist   = readrouters(testdir)
 
-for routers in routelist:
-    print(routers)
+#for routers in routelist:
+#    print(routers)
+
+for link,cost,_,_ in links:
+
+
+routerx     = Router(
 
 ## init routing table
 ## connect to neighbours

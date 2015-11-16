@@ -229,7 +229,7 @@ class Router:
                 for v in self.neighbors and v!=self.name:
                     Cx_v        = self.nodes[v].getcost()
                     Dv_y        = self.table.getvector(v,y.node)
-                    totalcost   = Cx_v + Dv_y.getcost()
+                    costv       = Cx_v + Dv_y.getcost()
                     mincost     = Dx_y.getcost()
 
                     if costv<mincost:
