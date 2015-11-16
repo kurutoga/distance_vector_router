@@ -16,7 +16,7 @@ class DistanceVector:
         return self.nexthop
 
     def updatevector(self,cost,hop):
-        self.cost   =cost
+        self.cost   =int(cost)
         self.nexthop=hop
 
         
@@ -80,7 +80,7 @@ class RoutingTable:
             d = DistanceVector(node,0)
             return d
         if index not in self.distance_vectors[node]:
-            d = DistanceVector(node,INFINITY)
+            d = DistanceVector(node,64)
             return d
         else:
             return self.distance_vectors[node][index]
@@ -97,8 +97,8 @@ class RoutingTable:
          Update Dv(x) for all x in nodes
         '''
         changed = False
-        for x,c in nodes.items():
-            changes = self.update_vector(v,x,c)
+        for x,c in nodes:
+            changes = self.update_vector(v,x,c,v)
             changed = changes or changed
         return changed
 
@@ -135,7 +135,7 @@ class Node:
 class Router:
     '''
 
-        Router Class (at node x):
+        -Router Class (at node x):
         NEEDS to contain these information:
             1) Cost c(x,v) for all attached neighbor v
             2) Routing Table:
@@ -162,12 +162,12 @@ class Router:
         
         for node,cost in neighbors:
             self.neighbors.append(node)
-            self.nodes[node] = Node(node,cost=cost)
+            self.nodes[node] = Node(node,cost=int(cost))
             self.table.addtable(node)
 
-    def addnode(self,base,node):
+    def addnode(self,node):
         if (node[0] not in self.nodes):
-            self.nodes[node[0]] = Node(node[0],cost=node[1])
+            self.nodes[node[0]] = Node(node[0],cost=int(node[1]))
 
     
     def removenode(self,node):
@@ -186,10 +186,11 @@ class Router:
         chunks  = message.split()
         size    = len(chunks)
         for i in range(1,int((size/2)+1)):
-            node = chunks[(i-1)*2]
-            cost = chunks[((i-1)*2)+1]
-            routes.append(node,cost)
-            self.addnode(node)
+            node = chunks[(i*2)-1]
+            cost = chunks[(i*2)]
+            n    = [node,int(cost)]
+            routes.append(n)
+            self.addnode(n)
         return self.table.updatedistancevector(base,routes)
 
     def getdistancevector(self):
@@ -231,19 +232,21 @@ class Router:
         '''
         tablechanged = False
         for y in self.nodes:
-            if (y.node != self.name): #to make sure not the base router
-                Dx_y            = self.table.getvector(self.name,y.node) #current Dx(y)
+            if (y != self.name): #to make sure not the base router
+                Dx_y            = self.table.getvector(self.name,y) #current Dx(y)
                 mincost         = Dx_y.getcost()
                 minhop          = Dx_y.gethop()
-                for v in self.neighbors and v!=self.name:
+                for v in self.neighbors:
+                    if v==self.name:
+                        continue
                     Cx_v        = self.nodes[v].getcost()
-                    Dv_y        = self.table.getvector(v,y.node)
+                    Dv_y        = self.table.getvector(v,y)
                     costv       = Cx_v + Dv_y.getcost()
                     if costv<mincost:
                         mincost = costv
                         minhop  = v
                 if (Dx_y.getcost()!=mincost):
-                    self.table.update_vector(self.name,y.node,mincost,minhop)
+                    self.table.update_vector(self.name,y,mincost,minhop)
                     tablechanged = True
         return tablechanged
                     

@@ -64,6 +64,17 @@ inputset.extend(neighborset)
 #outputset   = inputset[:]
 
 '''
+test block
+'''
+routerx.printhandle('P')
+routerx.linkcostupdate('L B 5')
+routerx.runbellmanford()
+routerx.routerupdate('B', 'U A 1 C 2')
+routerx.runbellmanford()
+routerx.printhandle('P')
+
+
+'''
 This is the infinite select loop.
 We aim to catch messages from neighbors,and other nodes
 on appropriate sockets.
@@ -73,7 +84,7 @@ if we timeout, we send the 'U' message to all neighbors.
 
 '''
 while (True):
-    timeout     = 30
+    timeout     = 2
     try:
         reader,writer,error = select.select(inputset,[],[],timeout)
     except Exception as e:
@@ -117,9 +128,4 @@ while (True):
             '''
             sendUmessage(neighborset,routerx)
 
-
 #print(outputset,inputset)
-
-
-
-
