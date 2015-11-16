@@ -17,7 +17,7 @@ PROJECT 2: Distance-Vector Router
 import sys, select
 from argparse import ArgumentParser as cliparser
 from readrouters import readlinks, readrouters
-from utils import setupserver, setupsock, broadcastcost
+from utils import setupserver, setupsock, broadcastcost, sendUmessage
 from models import Router
 
 '''
@@ -93,8 +93,8 @@ while (True):
     for s in reader:
         data = s.recv(1024)
         if data:
+            changes = False
             if s is broadcaster:
-                changes = False
                 '''
                     server socket on baseport of current router
                     we can expect to receive P and L messages
@@ -106,7 +106,6 @@ while (True):
                     routerx.printhandle(data)
                 else:
                     print('invalid message type')
-                    pass
             else:
                 '''
                     this must be a neighbor socket
@@ -121,11 +120,12 @@ while (True):
                     changes = routerx.routerupdate(base,data)
             if changes:
                 sendUmessage(neighborset,routerx)
-        if not (reader or writer or error):
-            '''
-            30 sec timeout.
-            Send 'U' messages to all neighbors
-            '''
-            sendUmessage(neighborset,routerx)
+    if not (reader or writer or error):
+        '''
+        30 sec timeout.
+        Send 'U' messages to all neighbors
+        '''
+        print('BLAH BLAH')
+        #sendUmessage(neighborset,routerx)
 
 #print(outputset,inputset)

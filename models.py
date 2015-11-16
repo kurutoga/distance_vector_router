@@ -45,7 +45,8 @@ class RoutingTable:
 
 
     def addtable(self,index):
-        self.distance_vectors[index] = {}
+        if (index not in self.distance_vectors):
+            self.distance_vectors[index] = {}
 
     #d-v update helper func
     def update_vector(self, node, index, cost, nhop):
@@ -220,6 +221,7 @@ class Router:
         if len(chunks)!=3:
             print('invalid link cost updater message')
             return
+        print(chunks[1],chunks[2])
         return self.nodes[chunks[1]].updatecost(int(chunks[2]))
 
     def runbellmanford(self):
