@@ -8,12 +8,16 @@ PROJECT 2: Distance-Vector Router
     models.py : functions and class definitions
                 Router Class has implementation of 
                 Bellman-Ford.
+    utils.py  : DGRAM socket setup
+                DGRAM connected socket setup
+                broadcast cost to given server
 
 
 '''
 import sys
-from argparser import ArgumentParser as cliparser
-from readrouters import readlinks, readroutes
+from argparse import ArgumentParser as cliparser
+from readrouter import readlinks, readroutes
+from utils import setupserver, setupsock, broadcastcost
 
 '''
 argparser is in python3 standard library
@@ -35,9 +39,10 @@ routername  = args.routername
 
 
 links       = readlinks(testdir, routername)
-routers     = readroutes(testdir)
+routelist   = readroutes(testdir)
 
-for 
+for routers in routelist:
+    print(routers)
 
 ## init routing table
 ## connect to neighbours
@@ -52,5 +57,4 @@ for
 ## 1. init routing table
 
 #vars
-routing_table={}
 

@@ -15,12 +15,9 @@ def setupserver(baseport):
 def setupsock(host,localport,remoteport):
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     try:
-        sock.bind('',port)
+        sock.bind('',localport)
         sock.connect(host,remoteport)
         return sock
     except Exception,e:
         print("Error: ",Exception,e)
         return
-
-
-
