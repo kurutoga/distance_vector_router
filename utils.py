@@ -18,6 +18,5 @@ def setupsock(host,localport,remoteport):
         sock.bind('',localport)
         sock.connect(host,remoteport)
         return sock
-    except Exception,e:
-        print("Error: ",Exception,e)
+    except:
         return

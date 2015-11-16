@@ -16,7 +16,7 @@ PROJECT 2: Distance-Vector Router
 '''
 import sys
 from argparse import ArgumentParser as cliparser
-from readrouter import readlinks, readroutes
+from readrouters import readlinks, readrouters
 from utils import setupserver, setupsock, broadcastcost
 
 '''
@@ -39,7 +39,7 @@ routername  = args.routername
 
 
 links       = readlinks(testdir, routername)
-routelist   = readroutes(testdir)
+routelist   = readrouters(testdir)
 
 for routers in routelist:
     print(routers)

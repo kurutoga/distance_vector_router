@@ -13,7 +13,7 @@ def readrouters(testname):
     table = {}
     for line in lines:
         if line[0]=='#': continue
-        words = string.split(line)
+        words = line.split()
         table[words[0]] = RouterInfo(words[1], int(words[2]))
     f.close()
     return table
@@ -24,7 +24,7 @@ def readlinks(testname, router):
     table = {}
     for line in lines:
         if line[0]=='#': continue
-        words = string.split(line)
+        words = line.split()
         table[words[0]] = LinkInfo(int(words[1]), int(words[2]), int(words[3]))
     f.close()
     return table
