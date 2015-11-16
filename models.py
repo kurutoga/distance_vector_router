@@ -9,10 +9,10 @@ class DistanceVector:
         self.nexthop        = nexthop
         self.cost           = cost
 
-    def getcost(self);
+    def getcost(self):
         return self.cost
 
-    def gethop(self);
+    def gethop(self):
         return self.nexthop
 
     def updatevector(self,cost,hop):
@@ -31,7 +31,6 @@ class RoutingTable:
     as if they have INFINITY cost.
     '''
     INFINITY                = 64
-    self.distance_vectors   = {}
 
     def __init__(self, base, nodes):
         '''
@@ -39,6 +38,7 @@ class RoutingTable:
             the routes from the .cfg files are added to the initial routing table.
             rest of the routes are considered INFINITY
         '''
+        self.distance_vectors       = {}
         self.distance_vectors[base] = {}
         for x,c in nodes:
             self.distance_vectors[base][x] = DistanceVector(base,c)
@@ -55,7 +55,7 @@ class RoutingTable:
             self.distance_vectors[node][index] = DistanceVector(nhop,cost)
             print('{0} - dest: {1} cost: {2} nexthop: {3}'.format(node,index,cost,nhop))
             return True
-        else if ((self.distance_vectors[node][index].getcost()!=cost) or (self.distance_vectors[node][index].gethop()!=nhop)):
+        elif ((self.distance_vectors[node][index].getcost()!=cost) or (self.distance_vectors[node][index].gethop()!=nhop)):
             self.distance_vectors[node][index].updatevector(cost,nhop)
             print('{0} - dest: {1} cost: {2} nexthop: {3}'.format(node,index,cost,nhop))
             return True
@@ -93,7 +93,7 @@ class RoutingTable:
          Update Dv(x) for all x in nodes
         '''
         changed = False
-        for x,c in nodes:
+        for x,c in nodes.items():
             changes = self.update_vector(v,x,c)
             changed = changes or changed
         return changed
@@ -110,8 +110,6 @@ class Node:
 
     '''
     INFINITY                = 64
-    self.node               = ''
-    self.cost               = INFINITY  
 
     def __init__(self,node,cost=INFINITY):
         self.node                   = node
@@ -151,14 +149,13 @@ class Router:
 
     '''
 
-    self.name               = ''
-    self.nodes              = {}
-    self.neighbors          = []
 
     def __init__(self, node, neighbors):
-        self.name   = node
-        self.node   = Node(node,0)
-        self.table  = RoutingTable(node, neighbors)
+        self.name       = node
+        self.node       = Node(node,0)
+        self.nodes      = {}
+        self.neighbors  = []
+        self.table      = RoutingTable(node, neighbors)
         
         for node,cost in neighbors:
             self.neighbors.append(node)

@@ -18,6 +18,7 @@ import sys
 from argparse import ArgumentParser as cliparser
 from readrouters import readlinks, readrouters
 from utils import setupserver, setupsock, broadcastcost
+from models import Router
 
 '''
 argparser is in python3 standard library
@@ -38,16 +39,19 @@ poisoned    = args.p
 routername  = args.routername
 
 
-links       = readlinks(testdir, routername)
-routelist   = readrouters(testdir)
+links           = readlinks(testdir, routername)
+routerlist      = readrouters(testdir)
 
-#for routers in routelist:
-#    print(routers)
+linkinfos = {}
+neighbor = []
 
-for link,cost,_,_ in links:
+for link,linkinfo in links.items():
+    linkinfos[link]  = linkinfo
+    neighbor.append([link,linkinfo.cost])
 
 
-routerx     = Router(
+routerx     = Router(routername, neighbor)
+
 
 ## init routing table
 ## connect to neighbours
