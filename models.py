@@ -77,6 +77,7 @@ class RoutingTable:
             return d
         if index not in self.distance_vectors[node]:
             d = DistanceVector(node,INFINITY)
+            return d
         else:
             return self.distance_vectors[node][index]
 
