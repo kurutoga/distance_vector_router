@@ -32,11 +32,10 @@ parser.add_argument('-p', action='store_true')
 parser.add_argument('testdir')
 parser.add_argument('routername')
 
-args = parser.parse_args()
-testdir     = args.testdir
-poisoned    = args.p
-routername  = args.routername
-
+args            = parser.parse_args()
+testdir         = args.testdir
+poisoned        = args.p
+routername      = args.routername
 
 links           = readlinks(testdir, routername)
 routerlist      = readrouters(testdir)
@@ -50,17 +49,19 @@ routerx     = Router(routername, neighbor, poisoned)
 
 neighborset = []
 broadcaster = setupserver(routerlist[routername].host,routerlist[routername].baseport)
+socketmap   = [ routername ]
 
 for host,info in routerlist.items():
     if host in links:
         neighborset.append(setupsock(routerlist[routername].host,routerlist[host].host,\
                                      routerlist[routername].baseport+links[host].locallink,\
                                      routerlist[host].baseport+links[host].remotelink))
+        socketmap.append(host)
 
 inputset    = [ broadcaster ]
 inputset.extend(neighborset)
 
-outputset   = inputset[:]
+#outputset   = inputset[:]
 
 '''
 This is the infinite select loop.
@@ -74,7 +75,7 @@ if we timeout, we send the 'U' message to all neighbors.
 while (True):
     timeout     = 30
     try:
-        reader,writer,error = select.select(inputset,outputset,[],timeout)
+        reader,writer,error = select.select(inputset,[],[],timeout)
     except Exception as e:
         print(e)
         break
@@ -82,15 +83,16 @@ while (True):
         data = s.recv(1024)
         if data:
             if s is broadcaster:
+                changes = False
                 '''
                     server socket on baseport of current router
                     we can expect to receive P and L messages
                 '''
                 # we got a message
                 if (data[0]=='L'):
-                    pass
+                    changes = routerx.linkcostupdate(data)
                 elif (data[0]=='P'):
-                    pass
+                    routerx.printhandle(data)
                 else:
                     print('invalid message type')
                     pass
@@ -99,21 +101,21 @@ while (True):
                     this must be a neighbor socket
                     only U messages expected.
                 '''
+                base = ''
+                for i in range(len(neighborset)):
+                    if (neighborset[i]==s):
+                        base = socketmap[i+1]
                 if (data[0]=='U'):
-
                     #update message
-                    #routerx.routerupdate(
-                    pass
-                pass
+                    changes = routerx.routerupdate(base,data)
+            if changes:
+                sendUmessage(neighborset,routerx)
         if not (reader or writer or error):
             '''
             30 sec timeout.
             Send 'U' messages to all neighbors
             '''
-            distancevector = routerx.getdistancevector()
-            for sock in neighborset:
-                broadcastcost(sock, distancevector)
-        
+            sendUmessage(neighborset,routerx)
 
 
 #print(outputset,inputset)

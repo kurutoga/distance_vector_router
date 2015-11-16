@@ -210,7 +210,7 @@ class Router:
             return self.nodes[name]
         return False
 
-    def linkcostupdate(self, base, message):
+    def linkcostupdate(self, message):
         '''
         handler for the L messages
         assuming always right format.

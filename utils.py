@@ -11,6 +11,11 @@ def broadcastcost(sock, nodes):
         message+=node+' '+str(vector.cost)
     sock.send(message)
 
+def sendUmessage(socks, router):
+    distancevector = router.getdistancevector()
+    for s in socks:
+        broadcastcost(s, distancevector)
+
 def setupserver(host,baseport):
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     sock.bind(('',baseport))
