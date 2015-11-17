@@ -213,6 +213,7 @@ class Router:
         return False
 
     def fixhops(self, node):
+        vectors = self.table.gettable[self.name]
         for k,vector in vectors.items():
             if (vector.nexthop==node):
                 vector.cost = 64
