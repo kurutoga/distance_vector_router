@@ -211,13 +211,13 @@ class Router:
         if name in self.nodes:
             return self.nodes[name]
         return False
-
+'''
     def fixhops(self, node):
         vectors = self.table.gettable[self.name]
         for k,vector in vectors.items():
             if (vector.nexthop==node):
                 vector.cost = 64
-
+'''
     def linkcostupdate(self, message):
         '''
         handler for the L messages
@@ -227,7 +227,7 @@ class Router:
         if len(chunks)!=3:
             print('invalid link cost updater message')
             return
-        self.fixhops(chunks[1])
+   #     self.fixhops(chunks[1])
         return self.nodes[chunks[1]].updatecost(int(chunks[2]))
 
     def runbellmanford(self):
