@@ -66,13 +66,6 @@ inputset.extend(neighborset)
 '''
 test block
 '''
-routerx.printhandle('P')
-routerx.linkcostupdate('L B 5')
-routerx.runbellmanford()
-routerx.routerupdate('B', 'U A 1 C 2')
-routerx.runbellmanford()
-routerx.printhandle('P')
-
 
 '''
 This is the infinite select loop.
@@ -93,6 +86,7 @@ while (True):
     for s in reader:
         data = s.recv(1024)
         if data:
+            print('data ' + data.decode())
             changes = False
             if s is broadcaster:
                 '''
@@ -125,7 +119,8 @@ while (True):
         30 sec timeout.
         Send 'U' messages to all neighbors
         '''
-        print('BLAH BLAH')
-        #sendUmessage(neighborset,routerx)
+        print('sending message')
+        routerx.runbellmanford()
+        sendUmessage(neighborset,routerx)
 
 #print(outputset,inputset)

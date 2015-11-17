@@ -1,0 +1,5 @@
+./router.py test1 A &
+./router.py test1 B &
+./router.py test1 C &
+./router.py test1 D &
+./router.py test1 E &
