@@ -66,7 +66,8 @@ inputset.extend(neighborset)
 '''
 test block
 '''
-
+routerx.printhandle('P')
+routerx.printhandle('P B')
 '''
 This is the infinite select loop.
 We aim to catch messages from neighbors,and other nodes
