@@ -86,7 +86,7 @@ while (True):
         data = s.recv(1024)
         if data:
             data = data.decode()
-            print('data ' + data)
+            print(data)
             changes = False
             if s is broadcaster:
                 '''
