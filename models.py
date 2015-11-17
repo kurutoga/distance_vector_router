@@ -261,18 +261,23 @@ class Router:
                 d: to print neighbor d's routing table
 
         '''
-        print('')
         routingtable = self.getdistancevector()
         chunk = message.split()
         if len(chunk)==1: 
-            print('Entire Routing Table:')
-            print('     ',end='')
+            output='\n';
+            output+='Entire Routing Table:\n'
+            output+='     '
             for name,_ in routingtable.items():
-                print(name, end="   ")
-            print('')
-            print(self.name,end="    ")
+                output+=name
+                output+='    '
+            output+='\n'
+            output+=self.name
+            output+='    '
             for _,info in routingtable.items():
-                print(info.cost, end="   ",flush=True)
+                output+=str(info.cost)
+                output+='    '
+            output+='\n'
+            print(output, flush=True)   
         else:
             print('Routing Table Entry for {0}: COST= {1} NEXTHOP= {2}'.format(self.name,
                 routingtable[chunk[1]].getcost(),
