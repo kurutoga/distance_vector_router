@@ -272,7 +272,7 @@ class Router:
             print('')
             print(self.name,end="    ")
             for _,info in routingtable.items():
-                print(info.cost, end="   ")
+                print(info.cost, end="   ",flush=True)
         else:
             print('Routing Table Entry for {0}: COST= {1} NEXTHOP= {2}'.format(self.name,
                 routingtable[chunk[1]].getcost(),

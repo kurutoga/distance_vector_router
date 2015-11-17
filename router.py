@@ -76,7 +76,7 @@ if we timeout, we send the 'U' message to all neighbors.
 
 '''
 while (True):
-    timeout     = 2
+    timeout     = 10
     try:
         reader,writer,error = select.select(inputset,[],[],timeout)
     except Exception as e:
