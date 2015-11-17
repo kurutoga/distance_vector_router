@@ -86,7 +86,8 @@ while (True):
     for s in reader:
         data = s.recv(1024)
         if data:
-            print('data ' + data.decode())
+            data = data.decode()
+            print('data ' + data)
             changes = False
             if s is broadcaster:
                 '''
@@ -113,6 +114,7 @@ while (True):
                     #update message
                     changes = routerx.routerupdate(base,data)
             if changes:
+                routerx.runbellmanford()
                 sendUmessage(neighborset,routerx)
     if not (reader or writer or error):
         '''
@@ -120,7 +122,6 @@ while (True):
         Send 'U' messages to all neighbors
         '''
         print('sending message')
-        routerx.runbellmanford()
         sendUmessage(neighborset,routerx)
 
 #print(outputset,inputset)
