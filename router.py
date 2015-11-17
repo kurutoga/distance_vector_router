@@ -95,7 +95,7 @@ while (True):
                 '''
                 # we got a message
                 if (data[0]=='L'):
-                    routerx.linkcostupdate(data)
+                    changes = routerx.linkcostupdate(data)
                 elif (data[0]=='P'):
                     routerx.printhandle(data)
                 else:

@@ -241,6 +241,7 @@ class Router:
         for y in self.nodes:
             if (y != self.name): #to make sure not the base router
                 mincost         = 64
+                minhop          = ''
                 for v in self.neighbors:
                     if v==self.name:
                         continue
@@ -252,7 +253,6 @@ class Router:
                         minhop  = v
                 Dx_y = self.table.getvector(self.name,y)
                 if (Dx_y.getcost()!=mincost or Dx_y.gethop()!=minhop):
-                    print('here')
                     self.table.update_vector(self.name,y,mincost,minhop)
                     tablechanged = True
         return tablechanged
