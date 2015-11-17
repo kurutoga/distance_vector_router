@@ -227,7 +227,6 @@ class Router:
         if len(chunks)!=3:
             print('invalid link cost updater message')
             return
-   #     self.fixhops(chunks[1])
         return self.nodes[chunks[1]].updatecost(int(chunks[2]))
 
     def runbellmanford(self):
@@ -253,6 +252,7 @@ class Router:
                         minhop  = v
                 Dx_y = self.table.getvector(self.name,y)
                 if (Dx_y.getcost()!=mincost or Dx_y.gethop()!=minhop):
+                    print('here')
                     self.table.update_vector(self.name,y,mincost,minhop)
                     tablechanged = True
         return tablechanged
