@@ -96,7 +96,6 @@ while (True):
                 # we got a message
                 if (data[0]=='L'):
                     routerx.linkcostupdate(data)
-                    runbellmanford()
                 elif (data[0]=='P'):
                     routerx.printhandle(data)
                 else:
@@ -114,8 +113,8 @@ while (True):
                     #update message
                     changes = routerx.routerupdate(base,data)
             if changes:
-                if (routerx.runbellmanford()):
-                    sendUmessage(neighborset,routerx)
+                routerx.runbellmanford()
+                sendUmessage(neighborset,routerx)
     if not (reader or writer or error):
         '''
         30 sec timeout.
