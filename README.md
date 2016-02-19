@@ -1,6 +1,6 @@
 # Distance Vector Routers Simulation
 
-This project uses Bellman-Ford Algorithm to update routing tables for neighbouring Routers. This is completely implemented in Python. 
+This project uses Bellman-Ford Algorithm to update routing tables for neighbouring Routers. This is completely implemented in Python. Used for CPTS 455 - Computer Networking Class.
 
 // Structure:
 
